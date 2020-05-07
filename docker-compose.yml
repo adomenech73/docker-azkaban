@@ -1,25 +1,31 @@
-mariadb:
-    image: mariadb:10
-    restart: always
-    ports:
-        - "3306:3306"
-    environment:
-        - MYSQL_USER=azkaban
-        - MYSQL_PASSWORD=azkaban
-        - MYSQL_DATABASE=azkaban
-        - MYSQL_ROOT_PASSWORD=wootwoot
+version: "3.7"
 
-executor:
-    image: puckel/azkaban-executor
-    restart: always
-    links:
-        - mariadb
+services:
+    mariadb:
+        # image: adomenech73/azkaban-mariadb:10
+        build: mariadb
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_USER=azkaban
+            - MYSQL_PASSWORD=azkaban
+            - MYSQL_DATABASE=azkaban
+            - MYSQL_ROOT_PASSWORD=wootwoot
 
-webserver:
-    image: puckel/azkaban-webserver
-    restart: always
-    ports:
-        - "8443:8443"
-    links:
-        - executor:azkaban-executor
-        - mariadb
+    executor:
+        # image: adomenech73/azkaban-executor:3.84.15
+        build: azkaban-executor
+        restart: always
+        links:
+            - mariadb
+
+    webserver:
+        # image: adomenech73/azkaban-webserver:3.84.15
+        build: azkaban-webserver
+        restart: always
+        ports:
+            - "8443:8443"
+        links:
+            - executor:azkaban-executor
+            - mariadb
