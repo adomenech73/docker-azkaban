@@ -8,8 +8,8 @@ RUN wget https://github.com/azkaban/azkaban/archive/${AZK_VERSION}.tar.gz -O - |
     cd azkaban-${AZK_VERSION} && \
     ./gradlew build -x test installDist --no-daemon
 
-FROM harbor.reviewpro.com/library/oracle-jre:8u181-b13
-LABEL maintainer="albert.domenech@reviewpro.com"
+FROM adoptopenjdk/openjdk8:alpine-jre
+LABEL maintainer="adomenech_at_gmail_dot_com"
 
 ENV AZK_VERSION 3.84.15
 ENV MYSQL_JDBC_VERSION=5.1.45
